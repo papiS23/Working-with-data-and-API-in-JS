@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container"></div>
+    <script>
+        console.log("before fetch");
+        const imgsUrls = ['rainbow.jpg', 'storm.jpg', 'sandstorm.jpg'];
+
+
+
+        for (img of imgsUrls) {
+            console.log(img);
+            catchRainbow(img)
+                .then(response => {
+                    console.log("it works.");
+                })
+                .catch(error => {
+                    console.log("Error!");
+                    console.error(error);
+                });
+        }
+
+        async function catchRainbow(url) {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(blob);
+            document.querySelector(".container").appendChild(img);
+        }
+    </script>
+</body>
+
+</html>
