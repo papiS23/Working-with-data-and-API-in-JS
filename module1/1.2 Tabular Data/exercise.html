@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        getData();
+        async function getData() {
+            const response = await fetch('births-deaths.csv');
+            const data = await response.text();
+
+            const table = data.split('\n').slice(1);
+
+            const births = [];
+            const deaths = [];
+
+            table.forEach(element => {
+                const year = element.split(',')[0];
+                const BD = element.split(',')[1];
+                const count = element.split(',')[2].trim();
+                const tempTable = [year, count];
+
+                if (BD == 'Births') {
+                    births.push(tempTable);
+                } else {
+                    deaths.push(tempTable);
+                }
+            });
+
+            for (let i = 0; i < births.length; i++) {
+                console.log(`${births[i][0]} B:${births[i][1]}, D:${deaths[i][1]}, C:${births[i][1]-deaths[i][1]}`);
+            }
+        }
+    </script>
+</body>
+
+</html>
