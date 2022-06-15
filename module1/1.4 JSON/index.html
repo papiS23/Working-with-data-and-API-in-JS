@@ -5,12 +5,58 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Where is the ISS?</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+        integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+        integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+        crossorigin=""></script>
 </head>
 
 <body>
+    <h1>Where is the ISS?</h1>
+    <p>Latitude: <span id="lat"></span></p>
+    <p>Longitude: <span id="lon"></span></p>
+    <div id="map" style="height: 400px; width: 600px;"></div>
     <script>
+        const url = 'https://api.wheretheiss.at/v1/satellites/25544';
 
+        const map = L.map('map').setView([0, 0], 2);
+        const issIcon = L.icon({
+            iconUrl: 'iss.png',
+            iconSize: [50, 32],
+            iconAnchor: [25, 16]
+        });
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+        const marker = L.marker([0, 0], {
+            icon: issIcon
+        }).addTo(map);
+
+        let firstTime = true;
+        async function getIss(api_url) {
+            const response = await fetch(api_url);
+            const data = await response.json();
+            const {
+                latitude,
+                longitude
+            } = data;
+
+            marker.setLatLng([latitude, longitude]);
+            if (firstTime) {
+                map.setView([latitude, longitude]);
+                firstTime = false;
+            }
+
+            document.querySelector('#lat').innerText = latitude.toFixed(2);
+            document.querySelector('#lon').innerText = longitude.toFixed(2);
+        }
+        setInterval(function () {
+            getIss(url);
+        }, 1000);
     </script>
 </body>
 
