@@ -9,21 +9,38 @@
 </head>
 
 <body>
-    <h1>It works!</h1>
-    <p>Latitude: <span id="lat"></span></p>
-    <p>Longitude: <span id="lon"></span></p>
     <script>
         if ('geolocation' in navigator) {
             console.log("Geolocation available");
-            navigator.geolocation.getCurrentPosition(function (pos) {
-                console.log(pos.coords.latitude, pos.coords.longitude);
-                document.querySelector('#lat').textContent = pos.coords.latitude;
-                document.querySelector('#lon').textContent = pos.coords.longitude;
+            navigator.geolocation.getCurrentPosition(async function (pos) {
+                const lat = pos.coords.latitude;
+                const lon = pos.coords.longitude;
+
+                document.querySelector('#lat').textContent = lat;
+                document.querySelector('#lon').textContent = lon;
+
+                const data = {
+                    lat,
+                    lon
+                };
+                const options = {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+                const response = await fetch('/api', options);
+                const json = await response.json();
+                console.log(json);
             });
         } else {
             console.log("Geolocation not available");
         }
     </script>
+    <h1>Data Selfie App</h1>
+    <p>Latitude: <span id="lat"></span></p>
+    <p>Longitude: <span id="lon"></span></p>
 </body>
 
 </html>
