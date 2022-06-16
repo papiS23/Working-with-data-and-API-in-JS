@@ -13,3 +13,4 @@ app.post("/api", (request, response) => {
     longitude: data.lon,
   });
 });
+//TODO: save the response data to the array and check out the node.js file system.
