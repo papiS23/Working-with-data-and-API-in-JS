@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>It works!</h1>
+    <p>Latitude: <span id="lat"></span></p>
+    <p>Longitude: <span id="lon"></span></p>
+    <script>
+        if ('geolocation' in navigator) {
+            console.log("Geolocation available");
+            navigator.geolocation.getCurrentPosition(function (pos) {
+                console.log(pos.coords.latitude, pos.coords.longitude);
+                document.querySelector('#lat').textContent = pos.coords.latitude;
+                document.querySelector('#lon').textContent = pos.coords.longitude;
+            });
+        } else {
+            console.log("Geolocation not available");
+        }
+    </script>
+</body>
+
+</html>
