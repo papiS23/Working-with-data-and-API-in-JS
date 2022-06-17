@@ -1,0 +1,17 @@
+{
+  "name": "2.3-exercise",
+  "version": "1.0.0",
+  "description": "exercise from third episode ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "exercise"
+  ],
+  "author": "Bartłomiej Papis",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}

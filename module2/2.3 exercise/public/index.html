@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.3 exercise</title>
+</head>
+
+<body>
+    <h1>My current location.</h1>
+    <p>Latitude: <span id="lat"></span></p>
+    <p>Longitude: <span id="lon"></span></p>
+    <button id="submit">Send to the server.</button>
+
+    <script>
+        const btn = document.querySelector('#submit');
+        const latSpan = document.querySelector('#lat');
+        const lonSpan = document.querySelector('#lon');
+
+        function getLocation() {
+            if ('geolocation' in navigator) {
+                navigator.geolocation.getCurrentPosition(pos => {
+                    const lat = pos.coords.latitude;
+                    const lon = pos.coords.longitude;
+
+                    latSpan.textContent = lat;
+                    lonSpan.textContent = lon;
+
+                    const data = {
+                        lat,
+                        lon
+                    };
+
+                    const options = {
+                        method: 'POST',
+                        body: JSON.stringify(data),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                    btn.addEventListener('click', async function () {
+                        const response = await fetch('/send_data', options);
+                        const json = await response.json();
+                        console.log(json.info);
+
+                    });
+                });
+            } else {
+                console.log('geolocation not available');
+            }
+        }
+        getLocation();
+    </script>
+</body>
+
+</html>
