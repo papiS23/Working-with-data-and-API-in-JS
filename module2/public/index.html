@@ -38,39 +38,46 @@
             const btn = document.querySelector('#submit');
             const latSpan = document.querySelector('#lat');
             const lonSpan = document.querySelector('#lon');
+            const moodInput = document.querySelector('#mood')
 
             getLocation();
             getData();
 
-            //TODO: mood status doesn't work, fix it.
+            //GETTING LOCATION AND SANDING IT TO THE SERVER 
             function getLocation() {
                 if ('geolocation' in navigator) {
                     navigator.geolocation.getCurrentPosition(pos => {
                         const lat = pos.coords.latitude;
                         const lon = pos.coords.longitude;
-                        let mood = '';
 
                         latSpan.textContent = lat;
                         lonSpan.textContent = lon;
 
-                        const data = {
-                            lat,
-                            lon,
-                            mood
-                        };
-
-                        const options = {
-                            method: 'POST',
-                            body: JSON.stringify(data),
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
-                        }
                         btn.addEventListener('click', async function () {
-                            data.mood = document.querySelector('#mood').value;
+                            video.loadPixels();
+                            const video64 = video.canvas.toDataURL();
+
+                            const mood = moodInput.value;
+                            const data = {
+                                lat,
+                                lon,
+                                mood,
+                                video64
+                            };
+
+                            const options = {
+                                method: 'POST',
+                                body: JSON.stringify(data),
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            }
+
                             const response = await fetch('/send_data', options);
                             const json = await response.json();
+
                             console.log(json);
+
                             getData();
                         });
                     });
@@ -81,7 +88,6 @@
             async function getData() {
                 const response = await fetch('/get_data');
                 const json = await response.json();
-                console.log(json);
                 seeData(json, document.querySelector('#seedata'));
             }
 
@@ -93,15 +99,17 @@
                     const pLat = document.createElement('p');
                     const pLon = document.createElement('p');
                     const pTime = document.createElement('p');
+                    const pMood = document.createElement('p');
+                    const image = document.createElement('img');
 
                     pLat.textContent = `Latitude: ${item.lat}`;
                     pLon.textContent = `Longitude: ${item.lon}`;
+                    pMood.textContent = `Mood: ${item.mood}`;
                     const time = new Date(item.timestand).toLocaleString();
                     pTime.textContent = time;
+                    image.src = item.video64;
 
-                    div.append(pLat);
-                    div.append(pLon);
-                    div.append(pTime);
+                    div.append(pLat, pLon, pTime, pMood, image);
                     div.style = 'border: 1px solid red;';
                     dir.append(div);
                 }
