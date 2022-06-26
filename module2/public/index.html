@@ -15,6 +15,7 @@
     <h1>My current location.</h1>
     <p>Latitude: <span id="lat"></span></p>
     <p>Longitude: <span id="lon"></span></p>
+    <label for="#">Mood: <input type="text" id="mood"></label>
     <button id="submit">Send to the server.</button>
     <button id="showData">Show Data</button>
     <div id="seedata" class="data"></div>
@@ -30,6 +31,10 @@
 
     <script>
         function setup() {
+            noCanvas();
+            const video = createCapture(VIDEO);
+            video.size(480, 400)
+
             const btn = document.querySelector('#submit');
             const latSpan = document.querySelector('#lat');
             const lonSpan = document.querySelector('#lon');
@@ -37,18 +42,21 @@
             getLocation();
             getData();
 
+            //TODO: mood status doesn't work, fix it.
             function getLocation() {
                 if ('geolocation' in navigator) {
                     navigator.geolocation.getCurrentPosition(pos => {
                         const lat = pos.coords.latitude;
                         const lon = pos.coords.longitude;
+                        let mood = '';
 
                         latSpan.textContent = lat;
                         lonSpan.textContent = lon;
 
                         const data = {
                             lat,
-                            lon
+                            lon,
+                            mood
                         };
 
                         const options = {
@@ -59,6 +67,7 @@
                             }
                         }
                         btn.addEventListener('click', async function () {
+                            data.mood = document.querySelector('#mood').value;
                             const response = await fetch('/send_data', options);
                             const json = await response.json();
                             console.log(json);
@@ -109,8 +118,6 @@
             document.querySelector('#showData').addEventListener('click', () => {
                 document.querySelector('.data').classList.toggle('data--active');
             });
-            noCanvas();
-            const video = createCapture(VIDEO);
         }
     </script>
 </body>
