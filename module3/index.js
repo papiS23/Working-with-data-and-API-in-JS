@@ -15,5 +15,17 @@ app.post("/send_location", (req, res) => {
 
   const timestand = Date.now();
   reqData.timestand = timestand;
+
+  database.insert(reqData);
   res.json(reqData);
+});
+
+app.get("/get_data", (req, res) => {
+  database.find({}, (error, data) => {
+    if (error) {
+      res.end();
+    } else {
+      res.json(data);
+    }
+  });
 });
