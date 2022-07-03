@@ -1,8 +1,6 @@
 const btn = document.querySelector(".check-in");
 const coordsP = document.querySelectorAll(".coords");
 
-//TODO: hidden api key file, weather fetch.
-
 const succesCallback = (pos) => {
   console.log("Geolocation available");
 
@@ -22,6 +20,8 @@ const succesCallback = (pos) => {
         "Content-Type": "application/json",
       },
     };
+
+    const weather_response = await fetch("get_weather", options);
 
     const response = await fetch("/send_location", options);
     const json = await response.json();
