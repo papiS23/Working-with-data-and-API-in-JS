@@ -1,5 +1,7 @@
 const express = require("express");
 const Datastore = require("nedb");
+const fetch = (...args) =>
+  import("node-fetch").then(({ default: fetch }) => fetch(...args));
 const app = express();
 
 app.listen(3000, () => console.log("Listening at port 3000"));
@@ -30,20 +32,17 @@ app.get("/get_data", (req, res) => {
   });
 });
 
-//TODO: how to use fetch in node, hidden API key file;
+//TODO: hidden API key file;
 
-app.post("/get_weather", (req, res) => {
-  const lat = req.body.lat;
-  const lon = req.body.lon;
+app.post("/get_weather/:latlon", async (req, res) => {
+  const latlon = req.params.latlon.split(",");
+  const lat = latlon[0];
+  const lon = latlon[1];
   const apiKey = "";
 
-  getWeather(lat, lon, apiKey);
-
-  async function getWeather(lat, lon, apiKey) {
-    const weather_response = await fetch(
-      `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${apiKey}`
-    );
-    const weather_json = await weather_response.json();
-    console.log(weather_json);
-  }
+  const weather_response = await fetch(
+    `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${apiKey}`
+  );
+  const weather_json = await weather_response.json();
+  res.json(weather_json);
 });

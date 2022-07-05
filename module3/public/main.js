@@ -21,7 +21,11 @@ const succesCallback = (pos) => {
       },
     };
 
-    const weather_response = await fetch("get_weather", options);
+    const weather_response = await fetch(`get_weather/${lat},${lon}`, {
+      method: "POST",
+    });
+    const weather_json = await weather_response.json();
+    console.log(weather_json);
 
     const response = await fetch("/send_location", options);
     const json = await response.json();
