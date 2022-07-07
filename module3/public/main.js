@@ -32,8 +32,16 @@ const succesCallback = async (pos) => {
   });
   const weather_json = await weather_response.json();
   console.log(weather_json);
+
   const temp = weather_json.current.temp;
+  const desc = weather_json.current.weather[0].description;
+  const humidity = weather_json.current.humidity;
+  const uvi = weather_json.current.uvi;
+
   document.querySelector(".temp").textContent = temp;
+  document.querySelector(".desc").textContent = desc;
+  document.querySelector(".humi").textContent = humidity;
+  document.querySelector(".uvi").textContent = uvi;
 };
 
 const errorCallback = (err) => {

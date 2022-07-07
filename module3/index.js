@@ -38,10 +38,11 @@ app.post("/get_weather/:latlon", async (req, res) => {
   const latlon = req.params.latlon.split(",");
   const lat = latlon[0];
   const lon = latlon[1];
-  const apiKey = "";
+  const lang = "en";
+  const apiKey = "6a9d5edc4809eca9afd1b2ed509563ff";
 
   const weather_response = await fetch(
-    `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`
+    `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&units=metric&lang=${lang}&appid=${apiKey}`
   );
   const weather_json = await weather_response.json();
   res.json(weather_json);
