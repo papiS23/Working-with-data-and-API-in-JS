@@ -41,9 +41,21 @@ app.post("/get_weather/:latlon", async (req, res) => {
   const lang = "en";
   const apiKey = "";
 
+  //WEATHER DATA
   const weather_response = await fetch(
     `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&units=metric&lang=${lang}&appid=${apiKey}`
   );
-  const weather_json = await weather_response.json();
-  res.json(weather_json);
+  const weather_data = await weather_response.json();
+
+  //AIR QUALITY DATA
+  const air_response = await fetch(
+    `http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`
+  );
+  const aq_data = await air_response.json();
+
+  const data = {
+    air_quality: aq_data,
+    weather: weather_data,
+  };
+  res.json(data);
 });
